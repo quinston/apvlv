@@ -31,10 +31,8 @@
  *  AuthorRef: Alf <naihe2010@gmail.com>
  *  Blog:      http://naihe2010.cublog.cn
  ****************************************************************************/
-#include "ApvlvDoc.hpp"
 #include "ApvlvParams.hpp"
 #include "ApvlvCmds.hpp"
-#include "ApvlvUtil.hpp"
 #include "ApvlvView.hpp"
 
 #include <stdlib.h>
@@ -48,35 +46,43 @@
 #include <iostream>
 #include <sstream>
 
+#ifdef WIN32
+#define snprintf sprintf_s
+#endif
+
 namespace apvlv
 {
-  ApvlvView::ApvlvView (ApvlvParams *pa): ApvlvCmds (pa)
+  ApvlvView *gView = NULL;
+
+  ApvlvView::ApvlvView (int argc, char *argv[])
     {
+      gtk_init (&argc, &argv);
+
       mainwindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       g_signal_connect (G_OBJECT (mainwindow), "size-allocate",
                         G_CALLBACK (apvlv_view_resized_cb), this);
 
-      width = atoi (param->settingvalue ("width"));
-      height = atoi (param->settingvalue ("height"));
+      width = atoi (gParams->settingvalue ("width"));
+      height = atoi (gParams->settingvalue ("height"));
 
       full_has = FALSE;
       gtk_widget_set_size_request (mainwindow, width, height);
 
       g_object_set_data (G_OBJECT (mainwindow), "view", this);
-      g_signal_connect (G_OBJECT (mainwindow), "event",
+      g_signal_connect (G_OBJECT (mainwindow), "key-press-event",
                         G_CALLBACK (apvlv_view_keypress_cb), this);
 
-      GtkWidget *vbox = gtk_vbox_new (FALSE, 0);
+      GtkWidget *vbox = gtk_vbox_new (FALSE, 2);
       gtk_container_add (GTK_CONTAINER (mainwindow), vbox);
 
-      adoc = new ApvlvDoc (param->settingvalue ("zoom"));
-      gtk_box_pack_start (GTK_BOX (vbox), adoc->widget (), FALSE, FALSE, 0);
-      crtadoc = adoc;
+      m_rootWindow = new ApvlvWindow (NULL);
+      m_rootWindow->setcurrentWindow (m_rootWindow);
+      gtk_box_pack_start (GTK_BOX (vbox), m_rootWindow->widget (), FALSE, FALSE, 0);
 
       statusbar = gtk_entry_new ();
-      gtk_box_pack_start (GTK_BOX (vbox), statusbar, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (vbox), statusbar, FALSE, FALSE, 0);
       g_object_set_data (G_OBJECT (statusbar), "view", this);
-      g_signal_connect (G_OBJECT (statusbar), "event", G_CALLBACK (apvlv_view_statusbar_cb), this);
+      g_signal_connect (G_OBJECT (statusbar), "key-press-event", G_CALLBACK (apvlv_view_statusbar_cb), this);
 
       g_signal_connect (G_OBJECT (mainwindow), "delete-event",
                         G_CALLBACK (apvlv_view_delete_cb), this);
@@ -85,9 +91,11 @@ namespace apvlv
 
       gtk_widget_show_all (mainwindow);
 
+      pro_cmd = 0;
+
       cmd_has = FALSE;
 
-      const char *fs = param->settingvalue ("fullscreen");
+      const char *fs = gParams->settingvalue ("fullscreen");
       if (strcmp (fs, "yes") == 0)
         {
           fullscreen ();
@@ -100,8 +108,21 @@ namespace apvlv
 
   ApvlvView::~ApvlvView ()
     {
-      delete adoc;
+      delete m_rootWindow;
+
+      map <string, ApvlvDoc *>::iterator it;
+      for (it = m_Docs.begin (); it != m_Docs.end (); ++ it)
+        {
+          delete it->second;
+        }
+      m_Docs.clear ();
     }
+
+  void
+    ApvlvView::show ()
+      {
+        gtk_main ();
+      }
 
   void 
     ApvlvView::open ()
@@ -114,7 +135,7 @@ namespace apvlv
                                                       GTK_STOCK_OK,
                                                       GTK_RESPONSE_ACCEPT,
                                                       NULL);
-        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dia), param->settingvalue ("defaultdir"));
+        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dia), gParams->settingvalue ("defaultdir"));
 
         GtkFileFilter *filter = gtk_file_filter_new ();
         gtk_file_filter_add_mime_type (filter, "PDF File");
@@ -127,10 +148,48 @@ namespace apvlv
           {
             gchar *filename =
               gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dia));
+
             loadfile (filename);
             g_free (filename);
           }
         gtk_widget_destroy (dia);
+      }
+
+  bool
+    ApvlvView::loadfile (const char *filename)
+      {
+        const char *abpath = absolutepath (filename);
+        ApvlvDoc *ndoc = hasloaded (abpath);
+        if (ndoc != NULL)
+          {
+            currentWindow ()->setDoc (ndoc);
+            return true;
+          }
+        else
+          {
+            ndoc = currentWindow ()->loadDoc (filename);
+            if (ndoc)
+              {
+                m_Docs[abpath] = ndoc;
+                return true;
+              }
+            else
+              {
+                return false;
+              }
+          }
+      }
+
+  ApvlvDoc *
+    ApvlvView::hasloaded (const char *filename)
+      {
+        char *abpath = absolutepath (filename);
+        if (m_Docs[abpath] != NULL)
+          {
+            debug ("has loaded: %p", m_Docs[abpath]);
+            return m_Docs[abpath];
+          }
+        return NULL;
       }
 
   void 
@@ -157,7 +216,7 @@ namespace apvlv
         cmd_show ();
       }
 
-  void 
+  void
     ApvlvView::cmd_show ()
       {
         if (mainwindow == NULL)
@@ -174,22 +233,22 @@ namespace apvlv
         if (mainwindow == NULL)
           return;
 
-        char temp[256] = { 0 };
+        char temp[256];
 
-        if (crtadoc != NULL && crtadoc->filename ())
+        if (crtadoc () != NULL && crtadoc ()->filename ())
           {
-            snprintf (temp, sizeof temp, "\"%s\"\t%d/%d\t\t%d\%\t\t\t\t%d\%",
-                      crtadoc->filename (),
-                      crtadoc->pagenumber (),
-                      crtadoc->pagesum (),
-                      (int) (crtadoc->zoomvalue () * 100),
-                      (int) (crtadoc->scrollrate () * 100)
-            );
+/*            snprintf (temp, sizeof temp, "\"%s\"\t%d/%d\t\t%d\\%\t\t\t\t%d\\%",
+                      crtadoc ()->filename (),
+                      crtadoc ()->pagenumber (),
+                      crtadoc ()->pagesum (),
+                      (int) (crtadoc ()->zoomvalue () * 100),
+                      (int) (crtadoc ()->scrollrate () * 100)
+            );*/
           }
 
         gtk_entry_set_text (GTK_ENTRY (statusbar), temp);
 
-        gtk_widget_grab_focus (crtadoc->widget ());
+        gtk_widget_grab_focus (crtadoc ()->widget ());
         cmd_has = FALSE;
       }
 
@@ -208,26 +267,160 @@ namespace apvlv
           }
       }
 
-  void
-    ApvlvView::parse_cmd (GdkEventKey * gek)
+  returnType 
+    ApvlvView::subprocess (int ct, guint key)
       {
-        if (gek->keyval == GDK_Page_Up)
+        guint procmd = pro_cmd;
+        pro_cmd = 0;
+        switch (procmd)
           {
-            prepage ();
+          case CTRL ('w'):
+            if (key == 'q'
+                || key == CTRL ('Q')
+            )
+              {
+                ApvlvWindow *nwin = currentWindow ()->getneighbor (1, CTRL ('w'));
+                if (nwin == NULL)
+                  {
+                    quit ();
+                  }
+                else
+                  {
+                    delete currentWindow ();
+                  }
+              }
+            else
+              {
+                return currentWindow ()->process (ct, key);
+              }
+            break;
+
+          case 'm':
+            crtadoc ()->markposition (key);
+            break;
+
+          case '\'':
+            crtadoc ()->jump (key);
+            break;
+
+          case 'z':
+            if (key == 'i')
+              crtadoc ()->zoomin ();
+            else if (key == 'o')
+              crtadoc ()->zoomout ();
+            break;
+
+          default:
+            return NO_MATCH;
+            break;
           }
-        else if (gek->keyval == GDK_Page_Down)
+
+        return MATCH;
+      }
+
+  returnType 
+    ApvlvView::process (int ct, guint key)
+      {
+        if (pro_cmd != 0)
           {
-            nextpage ();
+            return subprocess (ct, key);
           }
-        else if (gek->state == GDK_CONTROL_MASK)
+
+        switch (key)
           {
-            push ("C-");
-            push (gek->keyval);
+          case GDK_Page_Down:
+          case CTRL ('f'):
+            crtadoc ()->nextpage (ct);
+            break;
+          case GDK_Page_Up:
+          case CTRL ('b'):
+            crtadoc ()->prepage (ct);
+            break;
+          case CTRL ('d'):
+            crtadoc ()->halfnextpage (ct);
+            break;
+          case CTRL ('u'):
+            crtadoc ()->halfprepage (ct);
+            break;
+          case CTRL ('w'):
+            pro_cmd = CTRL ('w');
+            return NEED_MORE;
+            break;
+          case ':':
+            promptcommand ();
+            return NEED_MORE;
+          case '/':
+            promptsearch ();
+            return NEED_MORE;
+          case '?':
+            promptbacksearch ();
+            return NEED_MORE;
+          case 'H':
+            crtadoc ()->scrollto (0.0);
+            break;
+          case 'M':
+            crtadoc ()->scrollto (0.5);
+            break;
+          case 'L':
+            crtadoc ()->scrollto (1.0);
+            break;
+          case CTRL ('p'):
+          case GDK_Up:
+          case 'k':
+            crtadoc ()->scrollup (ct);
+            break;
+          case CTRL ('n'):
+          case CTRL ('j'):
+          case GDK_Down:
+          case 'j':
+            crtadoc ()->scrolldown (ct);
+            break;
+          case GDK_BackSpace:
+          case GDK_Left:
+          case CTRL ('h'):
+          case 'h':
+            crtadoc ()->scrollleft (ct);
+            break;
+          case GDK_space:
+          case GDK_Right:
+          case CTRL ('l'):
+          case 'l':
+            crtadoc ()->scrollright (ct);
+            break;
+          case 'R':
+            crtadoc ()->reload ();
+            break;
+          case 'o':
+            open ();
+            break;
+          case 'g':
+            crtadoc ()->markposition ('\'');
+            crtadoc ()->showpage (ct - 1);
+            break;
+          case 'm':
+            pro_cmd = 'm';
+            return NEED_MORE;
+            break;
+          case '\'':
+            pro_cmd = '\'';
+            return NEED_MORE;
+            break;
+          case 'q':
+            quit ();
+            break;
+          case 'f':
+            fullscreen ();
+            break;
+          case 'z':
+            pro_cmd = 'z';
+            return NEED_MORE;
+            break;
+          default:
+            return NO_MATCH;
+            break;
           }
-        else
-          {
-            push (gek->string);
-          }
+
+        return MATCH;
       }
 
   void
@@ -236,14 +429,17 @@ namespace apvlv
         switch (cmd_mode)
           {
           case SEARCH:
-            crtadoc->search (str);
+            crtadoc ()->markposition ('\'');
+            crtadoc ()->search (str);
             break;
 
           case BACKSEARCH:
-            crtadoc->backsearch (str);
+            crtadoc ()->markposition ('\'');
+            crtadoc ()->backsearch (str);
             break;
 
           case COMMANDMODE:
+            debug ("run: [%s]", str);
             runcmd (str);
             break;
 
@@ -273,45 +469,60 @@ namespace apvlv
             else if (cmd == "map")
               {
               }
+            else if (cmd == "sp")
+              {
+                currentWindow ()->separate (false);
+              }
             else if (cmd == "vsp")
               {
-              }
-            else if (cmd == "hsp")
-              {
+                currentWindow ()->separate (true);
               }
             else if (cmd == "zoom" || cmd == "z")
               {
-                setzoom (subcmd.c_str ());
+                crtadoc ()->setzoom (subcmd.c_str ());
               }
             else if (cmd == "forwardpage" || cmd == "fp")
               {
-                nextpage (atoi (subcmd.c_str ()));
+                if (subcmd == "")
+                crtadoc ()->nextpage (1);
+                else
+                crtadoc ()->nextpage (atoi (subcmd.c_str ()));
               }
-            else if (cmd == "prewardpage" || cmd == "pp")
+            else if (cmd == "prewardpage" || cmd == "bp")
               {
-                prepage (atoi (subcmd.c_str ()));
+                if (subcmd == "")
+                crtadoc ()->prepage (1);
+                else
+                crtadoc ()->prepage (atoi (subcmd.c_str ()));
               }
             else if (cmd == "goto" || cmd == "g")
               {
-                showpage (atoi (subcmd.c_str ()));
+                crtadoc ()->markposition ('\'');
+                crtadoc ()->showpage (atoi (subcmd.c_str ()) - 1);
               }
             else if ((cmd == "help" || cmd == "h")
                      && subcmd == "info")
               {
                 loadfile (helppdf);
-                showpage (2);
+                crtadoc ()->showpage (1);
               }
             else if ((cmd == "help" || cmd == "h")
                      && subcmd == "command")
               {
                 loadfile (helppdf);
-                showpage (4);
+                crtadoc ()->showpage (3);
               }
             else if ((cmd == "help" || cmd == "h")
                      && subcmd == "setting")
               {
-                loadfile (helppdf);
-                showpage (6);
+                crtadoc ()->loadfile (helppdf);
+                crtadoc ()->showpage (7);
+              }
+            else if ((cmd == "help" || cmd == "h")
+                     && subcmd == "prompt")
+              {
+                crtadoc ()->loadfile (helppdf);
+                crtadoc ()->showpage (8);
               }
             else if (cmd == "help" || cmd == "h")
               {
@@ -319,8 +530,15 @@ namespace apvlv
               }
             else if (cmd == "q" || cmd == "quit")
               {
-                // return, avoid to return to status mode
-                quit ();
+                ApvlvWindow *nwin = currentWindow ()->getneighbor (1, CTRL ('w'));
+                if (nwin == NULL)
+                  {
+                    quit ();
+                  }
+                else
+                  {
+                    delete currentWindow ();
+                  }
               }
 
             // After processed the command, return to status mode
@@ -333,43 +551,38 @@ namespace apvlv
                                       ApvlvView * view)
       {
         gtk_window_get_size (GTK_WINDOW (wid), &view->width, &view->height);
-        gtk_widget_set_usize (view->crtadoc->widget (), view->width, view->height - 20);
+        view->m_rootWindow->setsize (view->width, view->height - 20);
         gtk_widget_set_usize (view->statusbar, view->width, 20);
-        view->crtadoc->setsize (view->width, view->height - 20);
       }
 
-  gint 
+  gint
     ApvlvView::apvlv_view_keypress_cb (GtkWidget * wid, GdkEvent * ev)
       {
         ApvlvView *view =
           (ApvlvView *) g_object_get_data (G_OBJECT (wid), "view");
 
-        if (view->cmd_has == FALSE && ev->type == GDK_KEY_PRESS)
+        if (view->cmd_has == false)
           {
-            view->parse_cmd ((GdkEventKey *) ev);
-            if (view->cmd_has == false)
-              {
-                view->status_show ();
-              }
+            gCmds->append ((GdkEventKey *) ev);
             return TRUE;
           }
 
         return FALSE;
       }
 
-  gint 
+  gint
     ApvlvView::apvlv_view_statusbar_cb (GtkWidget * wid, GdkEvent * ev)
       {
         ApvlvView *view = (ApvlvView *) g_object_get_data (G_OBJECT (wid), "view");
 
-        if (view->cmd_has == TRUE && ev->type == GDK_KEY_PRESS)
+        if (view->cmd_has == TRUE)
           {
             GdkEventKey *gek = (GdkEventKey *) ev;
             if (gek->keyval == GDK_Return)
               {
                 gchar *str =
                   (gchar *) gtk_entry_get_text (GTK_ENTRY (view->statusbar));
-                if (str)
+                if (str && strlen (str) > 0)
                   {
                     view->run (str + 1);
                   }
@@ -391,14 +604,7 @@ namespace apvlv
     ApvlvView::apvlv_view_delete_cb (GtkWidget * wid, GtkAllocation * al,
                                      ApvlvView * view)
       {
-        if (view->adoc)
-          {
-            delete view->adoc;
-            view->adoc = NULL;
-          }
-
         view->mainwindow = NULL;
-
         gtk_main_quit ();
       }
 }

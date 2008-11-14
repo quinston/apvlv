@@ -36,6 +36,11 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
+#ifdef WIN32
+# include <windows.h>
+#endif
+
+#include <string>
 #include <iostream>
 #include <fstream>
 using namespace std;
@@ -43,12 +48,23 @@ using namespace std;
 namespace apvlv
 {
 
+#ifdef WIN32
+	string helppdf = "Startup.pdf";
+	string inifile = "_apvlvrc";
+	string sessionfile = "_apvlvinfo";
+#else
   string helppdf;
+  string inifile;
+  string sessionfile;
+#endif
 
   char *
     absolutepath (const char *path)
       {
         static char abpath[512];
+
+		if (path == NULL)
+			return NULL;
 
         if (g_path_is_absolute (path))
           {
@@ -63,7 +79,13 @@ namespace apvlv
           }
         else
           {
+#ifdef WIN32
+			GetCurrentDirectoryA (sizeof abpath, abpath);
+			strcat (abpath, "\\");
+			strcat (abpath, path);
+#else
             realpath (path, abpath);
+#endif
           }
 
         return abpath;
@@ -85,6 +107,50 @@ namespace apvlv
 
             ifs.close ();
             ofs.close ();
+			return true;
           }
+		return false;
+      }
+
+  void
+    gtk_insert_widget_inbox (GtkWidget *prev, bool after, GtkWidget *n)
+      {
+        GtkWidget *parent = gtk_widget_get_parent (prev);
+        gtk_box_pack_start (GTK_BOX (parent), n, TRUE, TRUE, 0);
+
+        gint id = after? 1: 0;
+        GList *children = gtk_container_get_children (GTK_CONTAINER (parent));
+        for (GList *child = children; child != NULL; child = child->next)
+          {
+            if (child->data == prev) 
+              {
+                break;
+              }
+            else
+              {
+                id ++;
+              }
+          }
+        g_list_free (children);
+
+        gtk_box_reorder_child (GTK_BOX (parent), n, id);
+
+        gtk_widget_show_all (parent);
+      }
+
+  void
+    logv (const char *level, const char *file, int line, const char *func, const char *ms, ...)
+      {
+        char p[256], temp[256];
+        va_list vap;
+
+        va_start (vap, ms);
+        vsprintf (p, ms, vap);
+        snprintf (temp, sizeof temp, "[%s] %s: %d: %s(): %s",
+                  level, file, line, func,
+                  p);
+        va_end (vap);
+
+        cerr << temp << endl;
       }
 }

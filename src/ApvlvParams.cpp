@@ -31,6 +31,7 @@
  *  AuthorRef: Alf <naihe2010@gmail.com>
  *  Blog:      http://naihe2010.cublog.cn
 ****************************************************************************/
+#include "ApvlvUtil.hpp"
 #include "ApvlvParams.hpp"
 
 #include <string.h>
@@ -41,6 +42,8 @@
 
 namespace apvlv
 {
+  ApvlvParams *gParams = NULL;
+
   ApvlvParams::ApvlvParams ()
     {
       settingpush ("fullscreen", "no");
@@ -48,7 +51,11 @@ namespace apvlv
       settingpush ("width", "800");
       settingpush ("height", "600");
       settingpush ("commandtimeout", "1000");
+#ifdef WIN32
+	  settingpush ("defaultdir", "C:\\");
+#else
       settingpush ("defaultdir", "/tmp");
+#endif
     }
 
   ApvlvParams::~ApvlvParams ()
@@ -64,7 +71,7 @@ namespace apvlv
 
       if (! os.is_open ())
         {
-          cerr << "Open configure file " << filename << " error." << endl;
+          err ("Open configure file %s error", filename);
           return false;
         }
 
@@ -74,7 +81,7 @@ namespace apvlv
           stringstream is (str);
           // avoid commet line, continue next
           is >> crap;
-          if (*(crap.c_str ()) == '\"' || crap == "")
+          if (crap[0] == '\"' || crap == "")
             {
               continue;
             }
@@ -82,7 +89,7 @@ namespace apvlv
           else if (crap == "set")
             {
               is >> argu;
-              int off = argu.find ('=');
+              size_t off = argu.find ('=');
               if (off == string::npos) 
                 {
                   is >> crap >> data;
@@ -111,24 +118,27 @@ namespace apvlv
                     }
                 }
 
-              cerr << "Syntax error: set: " << str << endl;
+              err ("Syntax error: set: %s", str.c_str ());
             }
           // like "map n next-page"
           else if (crap == "map")
             {
-              is >> argu >> data;
+              is >> argu;
+              getline (is, data);
+              while (data[0] == ' ' || data[0] == '\t')
+                data.erase (0, 1);
               if (argu.length () > 0 && data.length () > 0)
                 {
                   mappush (argu, data);
                 }
               else
                 {
-                  cerr << "Syntax error: map: " << str << endl;
+                  err ("Syntax error: map: %s", str.c_str ());
                 }
             }
           else
             {
-              cerr << "Unknown rc cmd: " << crap << ": " << str << endl;
+              err ("Unknown rc command: %s: %s", crap.c_str (), str.c_str ());
             }
         }
     }
@@ -137,6 +147,7 @@ namespace apvlv
     ApvlvParams::mappush (string &ch, string &str)
       {
         m_maps[ch] = str;
+		return true;
       }
 
   bool
@@ -144,6 +155,7 @@ namespace apvlv
       {
         string sch (ch), sstr (str);
         m_settings[sch] = sstr;
+		return true;
       }
 
   const char *
@@ -157,6 +169,23 @@ namespace apvlv
             return (*it).second.c_str ();
           }
         return NULL;
+      }
+
+  returnType 
+    ApvlvParams::getmap (const char *s, int n)
+      {
+        map <string, string>::iterator it;
+        for (it = m_maps.begin (); it != m_maps.end (); ++ it)
+          {
+            if (strncmp (it->first.c_str (), s, n) == 0)
+              {
+                if (it->first.size () == n)
+                  return MATCH;
+                else 
+                  return NEED_MORE;
+              }
+          }
+        return NO_MATCH;
       }
 
   const char *

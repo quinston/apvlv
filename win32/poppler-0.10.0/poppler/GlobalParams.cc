@@ -176,7 +176,7 @@ WinFontInfo *WinFontInfo::make(GooString *nameA, GBool boldA, GBool italicA,
   }
   regName->append(" (TrueType)");
   n = sizeof(buf);
-  if (RegQueryValueEx(regKey, regName->getCString(), NULL, NULL,
+  if (RegQueryValueExA (regKey, regName->getCString(), NULL, NULL,
 		      (LPBYTE)buf, &n) == ERROR_SUCCESS) {
     fileNameA = new GooString(winFontDir);
     fileNameA->append('\\')->append(buf);
@@ -258,7 +258,7 @@ WinFontList::WinFontList(char *winFontDirA) {
   } else {
     path = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Fonts\\";
   }
-  if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, path, 0,
+  if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, path, 0,
 		   KEY_QUERY_VALUE | KEY_ENUMERATE_SUB_KEYS,
 		   &regKey) == ERROR_SUCCESS) {
     EnumFonts(dc, NULL, &WinFontList::enumFunc1, (LPARAM)this);
@@ -370,7 +370,7 @@ int CALLBACK WinFontList::enumFunc2(CONST LOGFONT *font,
   WinFontInfo *fi;
 
   if (type & TRUETYPE_FONTTYPE) {
-    if ((fi = WinFontInfo::make(new GooString(font->lfFaceName),
+    if ((fi = WinFontInfo::make(new GooString((const char *) font->lfFaceName),
 				font->lfWeight >= 600,
 				font->lfItalic ? gTrue : gFalse,
 				fl->regKey, fl->winFontDir))) {

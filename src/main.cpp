@@ -48,48 +48,57 @@ int
 main (int argc, char *argv[])
 {
   setlocale (LC_ALL, "");
-  gtk_init (&argc, &argv);
 
-  ApvlvParams param;
-  //  param.debug ();
+  ApvlvParams sParams;
+  gParams = &sParams;
 
-  char *path = absolutepath ("~/.apvlvrc");
-  bool exist = g_file_test (path, G_FILE_TEST_IS_REGULAR);
+  ApvlvCmds sCmds;
+  gCmds = &sCmds;
+
+#ifdef WIN32
+  const char *path = inifile.c_str ();
+#else
+  const char *path = absolutepath (inifile.c_str ());
+#endif
+
+  gboolean exist = g_file_test (path, G_FILE_TEST_IS_REGULAR);
   if (!exist)
     {
+#ifdef WIN32
+		filecpy (path, "apvlvrc.example");
+#else
       string file = "";
       file += PREFIX;
       file += "/share/doc/apvlv/apvlvrc.example";
       filecpy (path, file.c_str ());
+#endif
     }
   else
     {
-      param.loadfile (path);
+      gParams->loadfile (path);
     }
   //  param.debug ();
 
-  // build the helppdf string
-  helppdf = "";
-  helppdf += PREFIX;
-  helppdf += "/share/doc/apvlv/Startup.pdf";
+  ApvlvView sView (argc, argv);
+  gView = &sView;
 
-  ApvlvView view (&param);
+  // build the helppdf string
+#ifdef WIN32
+  helppdf = "Startup.pdf";
+#else
+  helppdf = string (PREFIX);
+  helppdf += "/share/doc/apvlv/Startup.pdf";
+#endif
+
+  path = helppdf.c_str ();
   if (argc > 1)
     {
       path = absolutepath (argv[1]);
-      view.loadfile (path);
     }
-  else
-    {
-      char startfile[256];
-      snprintf (startfile, sizeof startfile, "%s/%s",
-                PREFIX,
-                "share/doc/apvlv/Startup.pdf"
-      );
-      view.loadfile (helppdf);
-    }
+  
+  gView->loadfile (path);
 
-  gtk_main ();
+  gView->show ();
 
   return 0;
 }

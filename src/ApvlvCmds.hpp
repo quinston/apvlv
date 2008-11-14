@@ -38,85 +38,80 @@
 # include "config.hpp"
 #endif
 
-#include "ApvlvParams.hpp"
+#include <gtk/gtk.h>
 
 #include <iostream>
-
-#include <gtk/gtk.h>
+#include <vector>
+using namespace std;
 
 namespace apvlv
 {
   class ApvlvCmds
     {
   public:
-    ApvlvCmds (ApvlvParams *pa);
+    ApvlvCmds ();
 
     ~ApvlvCmds ();
 
-    void push (char c) { char t[2] = { 0 }; t[0] = c; queue.append (t); tryrun (); }
-
-    void push (const char *cmd) { queue.append (cmd); tryrun (); }
-
-    void settimeout (guint msec) { cmd_timeout = msec; }
-
-    virtual void promptsearch () { }
-    virtual void promptbacksearch () { }
-    virtual void promptcommand () { }
-
-    virtual void run (const char *str) { }
-
-    virtual void loadfile (const char *filename) { }
-
-    virtual void open () { }
-
-    virtual void quit () { }
-
-    virtual void fullscreen () { }
-
-    virtual void markposition (const char p) { }
-    virtual void jump (const char p) { }
-
-    virtual bool reload () { }
-
-    virtual void showpage (int p) { }
-    virtual void prepage (int times = 1) { }
-    virtual void nextpage (int times = 1) { }
-    virtual void halfnextpage (int times = 1) { }
-    virtual void halfprepage (int times = 1) { }
-
-    virtual void scrollup (int times = 1) { }
-    virtual void scrolldown (int times = 1) { }
-    virtual void scrollleft (int times = 1) { }
-    virtual void scrollright (int times = 1) { }
-
-    virtual void setzoom (const char *s) { }
-    virtual void setzoom (double d) { }
-    virtual void zoomin () { }
-    virtual void zoomout () { }
-
-  protected:
-    ApvlvParams *param;
+    void append (GdkEventKey *gev);
 
   private:
-    bool tryrun ();
-    bool docmd (const char *s, int times = 1);
-    bool doargu (const char s);
+    void translate (GdkEventKey *gev, string *s);
 
-    static gboolean apvlv_cmds_timeout_cb (gpointer);
+    bool translate (string &s, GdkEventKey *gev);
 
-    enum
+    bool run ();
+
+    bool getcount ();
+
+    bool getcmd ();
+
+    returnType getmap ();
+
+    void sendmapkey (const char *s);
+
+    enum cmdState
       {
+        GETTING_COUNT,
+        GETTING_CMD,
         CMD_OK,
-        NEED_ARGUMENT,
-        NOT_MATCH,
       } state;
 
-    gint timer;
-    guint cmd_timeout;
-    guint cmd_last_time;
+    static gboolean apvlv_cmds_timeout_cb (gpointer);
+    gint timeouttimer;
+
     string queue;
-    string argu;
+
+    bool hasop;
+    int count;
+
+    bool getall;
+
+    const char *mapcmd;
+
+    guint cmd;
+
+    map <guint, const char *> KS;
+
+    /*
+    typedef pair <guint, const char *> keystritem;
+    vector <keystritem> KS2; */
+
+    bool buildevent (const char *p);
+
+    void destroyevent ();
+
+    void sendevent ();
+
+    int sendtimer;
+
+    static gboolean ae_send_next (void *);
+
+    vector <GdkEventKey> m_keys;
+
     };
+
+  extern ApvlvCmds *gCmds;
 }
 
 #endif

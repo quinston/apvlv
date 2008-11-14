@@ -38,6 +38,9 @@
 # include "config.hpp"
 #endif
 
+#include "ApvlvUtil.hpp"
+
+#include <string>
 #include <iostream>
 #include <map>
 
@@ -57,6 +60,8 @@ namespace apvlv
 
     const char *mapvalue (const char *key);
 
+    returnType getmap (const char *s, int n);
+
     const char *cmd (const char *key);
 
     bool settingpush (const char *ch, const char *str);
@@ -64,7 +69,7 @@ namespace apvlv
     const char *settingvalue (const char *key);
     
     //for debug
-    void debug ()
+    void show ()
       {
         map <string, string>::iterator it;
 
@@ -85,6 +90,8 @@ namespace apvlv
   private:
     map <string, string> m_maps, m_settings;
     };
+
+  extern ApvlvParams *gParams;
 }
 
 #endif

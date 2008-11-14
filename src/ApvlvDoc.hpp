@@ -38,6 +38,8 @@
 # include "config.hpp"
 #endif
 
+#include "ApvlvUtil.hpp"
+
 #include <gtk/gtk.h>
 #include <glib/poppler.h>
 
@@ -58,11 +60,11 @@ namespace apvlv
   class ApvlvDoc
     {
   public:
-    ApvlvDoc (const char *zm = "NORMAL", GtkWidget *vbox = NULL, GtkWidget *hbox = NULL);
+    ApvlvDoc (const char *zm = "NORMAL");
+
     ~ApvlvDoc ();
 
-    void vseperate ();
-    void hseperate ();
+    ApvlvDoc *copy ();
 
     const char *filename () { return doc? filestr.c_str (): NULL; }
 
@@ -74,15 +76,19 @@ namespace apvlv
 
     double zoomvalue () { return zoomrate; }
 
-    GtkWidget *widget () { return vbox; }
+    GtkWidget *widget ();
 
-    bool loadfile (string & filename, bool check = true) { loadfile (filename.c_str (), check); }
+    bool loadfile (string & filename, bool check = true) { return loadfile (filename.c_str (), check); }
 
     bool loadfile (const char *src, bool check = true);
 
     bool reload () { savelastposition (); return loadfile (filestr, false); }
 
-    void setsize (int wid, int hei) { width = wid; height = hei; }
+    void setsize (int wid, int hei);
+
+    void sizesmaller (int s = 1);
+
+    void sizebigger (int s = 1);
 
     void markposition (const char s);
 
@@ -94,6 +100,8 @@ namespace apvlv
     void prepage (int times = 1) { showpage (pagenum - times); }
     void halfnextpage (int times = 1);
     void halfprepage (int times = 1);
+
+    void scrollto (double s);
 
     void scrollup (int times = 1);
     void scrolldown (int times = 1);
@@ -108,17 +116,20 @@ namespace apvlv
     void search (const char *str);
     void backsearch (const char *str);
 
+    returnType process (int times, guint keyval, guint state);
+   
   private:
     PopplerPage *getpage (int p);
     void markselection ();
     bool needsearch (const char *str);
     GList * searchpage (int num);
     void refresh ();
-    void scrollto (double s);
     bool savelastposition ();
     bool loadlastposition ();
 
     static gboolean apvlv_doc_first_scroll_cb (gpointer);
+
+    static gboolean apvlv_doc_first_copy_cb (gpointer);
 
     ApvlvDoc *parent;
     vector <ApvlvDoc *> hchildren, vchildren;
@@ -154,7 +165,7 @@ namespace apvlv
 
     // vbox and hbox for multiple windows
     // vbox will be the main widget
-    GtkWidget *vbox, *hbox, *scrollwin, *image;
+    GtkWidget *scrollwin, *image;
     };
 }
 

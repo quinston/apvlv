@@ -46,22 +46,18 @@
 
 namespace apvlv
 {
-  ApvlvDoc::ApvlvDoc (const char *zm, GtkWidget *v, GtkWidget *h)
+  ApvlvDoc::ApvlvDoc (const char *zm)
     {
       doc = NULL;
+
       pagedata = NULL;
       pixbuf = NULL;
       page = NULL;
+
       results = NULL;
       searchstr = "";
 
-      v? vbox = v: vbox = gtk_vbox_new (TRUE, 0);
-      h? hbox = h: hbox = gtk_hbox_new (TRUE, 0);
-
-      gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
-
       scrollwin = gtk_scrolled_window_new (NULL, NULL);
-      gtk_box_pack_start (GTK_BOX (hbox), scrollwin, TRUE, TRUE, 0);
 
       image = gtk_image_new ();
       gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrollwin),
@@ -83,13 +79,32 @@ namespace apvlv
           savelastposition ();
         }
       positions.clear ();
-      gtk_widget_destroy (vbox);
+      gtk_widget_destroy (scrollwin);
     }
+
+  void
+    ApvlvDoc::setsize (int w, int h)
+      {
+        width = w;
+        height = h;
+        gtk_widget_set_usize (widget (), width, height);
+      }
+
+  ApvlvDoc *
+    ApvlvDoc::copy ()
+      {
+        char rate[16];
+        snprintf (rate, sizeof rate, "%f", zoomrate);
+        ApvlvDoc *ndoc = new ApvlvDoc (rate);
+        ndoc->loadfile (filestr, false);
+        ndoc->showpage (pagenum, scrollrate ());
+        return ndoc;
+      }
 
   bool
     ApvlvDoc::savelastposition ()
       {
-        char *path = absolutepath ("~/.apvlvinfo");
+		  char *path = absolutepath (sessionfile.c_str ());
 
         ofstream os (path, ios::app);
 
@@ -101,13 +116,15 @@ namespace apvlv
             os << scrollrate ();
             os << "\n";
             os.close ();
+			return true;
           }
+		return false;
       }
 
   bool
     ApvlvDoc::loadlastposition ()
       {
-        char *path = absolutepath ("~/.apvlvinfo");
+		  char *path = absolutepath (sessionfile.c_str ());
 
         ifstream os (path, ios::in);
 
@@ -144,55 +161,41 @@ namespace apvlv
             gtk_timeout_add (50, apvlv_doc_first_scroll_cb, this);
 
             os.close ();
+			return true;
           }
+		return false;
       }
 
-  void 
-    ApvlvDoc::vseperate ()
-    {
-      ApvlvDoc *ndoc = new ApvlvDoc ("NORMAL", vbox, NULL);
-      vchildren.insert (vchildren.end (), ndoc);
-    }
-
-  void 
-    ApvlvDoc::hseperate ()
-    {
-      ApvlvDoc *ndoc = new ApvlvDoc ("NORMAL", NULL, hbox);
-      hchildren.insert (vchildren.end (), ndoc);
-    }
-
-  bool 
+  bool
     ApvlvDoc::loadfile (const char *filename, bool check)
-  {
-    if (check)
       {
-        if (strcmp (filename, filestr.c_str ()) == 0)
+        if (check && strcmp (filename, filestr.c_str ()) == 0)
           {
             return false;
           }
+
+		gchar *ufilename = g_locale_to_utf8 (filename, -1, NULL, NULL, NULL);
+        gchar *uri = g_filename_to_uri (ufilename, NULL, NULL);
+        if (uri == NULL)
+          {
+            cerr << "Can't convert" << filename << "to a valid uri";
+            return false;
+          }
+
+        doc = poppler_document_new_from_file (uri, NULL, NULL);
+        g_free (uri);
+
+        if (doc != NULL)
+          {
+            zoominit = false;
+            lines = 50;
+            chars = 80;
+            filestr = filename;
+            loadlastposition ();
+          }
+
+        return doc == NULL? false: true;
       }
-
-    gchar *uri = g_filename_to_uri (filename, NULL, NULL);
-    if (uri == NULL)
-      {
-	cerr << "Can't convert" << filename << "to a valid uri";
-        return false;
-      }
-
-    doc = poppler_document_new_from_file (uri, NULL, NULL);
-    g_free (uri);
-
-    if (doc != NULL)
-      {
-        zoominit = false;
-        lines = 50;
-        chars = 80;
-        filestr = filename;
-        loadlastposition ();
-      }
-
-    return doc == NULL? false: true;
-  }
 
   void
     ApvlvDoc::setzoom (const char *z)
@@ -228,6 +231,12 @@ namespace apvlv
         zoommode = CUSTOM;
         zoomrate = d;
         refresh ();
+      }
+
+  GtkWidget *
+    ApvlvDoc::widget ()
+      {
+        return scrollwin;
       }
 
   PopplerPage *
@@ -340,9 +349,6 @@ namespace apvlv
         poppler_page_render_to_pixbuf (page, 0, 0, ix, iy, zoomrate, 0, pixbuf);
 
         gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
-
-        vrate = (vaj->upper - vaj->lower) / lines;
-        hrate = (haj->upper - haj->lower) / chars;
       }
 
   void
@@ -405,6 +411,7 @@ namespace apvlv
           return;
 
         gdouble val = gtk_adjustment_get_value (vaj);
+        vrate = (vaj->upper - vaj->lower) / lines;
         if (val - vrate * times > vaj->lower)
           {
             gtk_adjustment_set_value (vaj, val - vrate * times);
@@ -426,6 +433,7 @@ namespace apvlv
           return;
 
         gdouble val = gtk_adjustment_get_value (vaj);
+        vrate = (vaj->upper - vaj->lower) / lines;
         if (val + vrate * times + vaj->page_size < vaj->upper)
           {
             gtk_adjustment_set_value (vaj, val + vrate * times);
@@ -446,6 +454,7 @@ namespace apvlv
         if (doc == NULL)
           return;
 
+        hrate = (haj->upper - haj->lower) / chars;
         gdouble val = haj->value - hrate * times;
         if (val > vaj->lower)
           {
@@ -463,6 +472,7 @@ namespace apvlv
         if (doc == NULL)
           return;
 
+        hrate = (haj->upper - haj->lower) / chars;
         gdouble val = haj->value + hrate * times;
         if (val + haj->page_size < haj->upper)
           {
@@ -622,4 +632,11 @@ namespace apvlv
         return FALSE;
       }
 
+  gboolean 
+    ApvlvDoc::apvlv_doc_first_copy_cb (gpointer data)
+      {
+        ApvlvDoc *doc = (ApvlvDoc *) data;
+        doc->loadfile (doc->filestr, false);
+        return FALSE;
+      }
 }

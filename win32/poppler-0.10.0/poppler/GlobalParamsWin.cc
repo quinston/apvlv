@@ -162,19 +162,19 @@ static void GetWindowsFontDir(char *winFontDir, int cbWinFontDirLen)
     // WinNT4), so do a dynamic load of ANSI versions.
     winFontDir[0] = '\0';
 
-    HMODULE hLib = LoadLibrary("shell32.dll");
+    HMODULE hLib = LoadLibraryA ("shell32.dll");
     if (hLib) {
         SHGetFolderPathFunc = (HRESULT (__stdcall *)(HWND, int, HANDLE, DWORD, LPTSTR)) 
-                              GetProcAddress(hLib, "SHGetFolderPathA");
+                              GetProcAddress (hLib, "SHGetFolderPathA");
         if (SHGetFolderPathFunc)
-            (*SHGetFolderPathFunc)(NULL, CSIDL_FONTS, NULL, SHGFP_TYPE_CURRENT, winFontDir);
+            (*SHGetFolderPathFunc)(NULL, CSIDL_FONTS, NULL, SHGFP_TYPE_CURRENT, LPTSTR (winFontDir));
 
         if (!winFontDir[0]) {
             // Try an older function
             SHGetSpecialFolderPathFunc = (BOOL (__stdcall *)(HWND, LPTSTR, int, BOOL))
                                           GetProcAddress(hLib, "SHGetSpecialFolderPathA");
             if (SHGetSpecialFolderPathFunc)
-                (*SHGetSpecialFolderPathFunc)(NULL, winFontDir, CSIDL_FONTS, FALSE);
+                (*SHGetSpecialFolderPathFunc)(0, LPTSTR (winFontDir), CSIDL_FONTS, FALSE);
         }
         FreeLibrary(hLib);
     }
@@ -182,19 +182,19 @@ static void GetWindowsFontDir(char *winFontDir, int cbWinFontDirLen)
         return;
 
     // Try older DLL
-    hLib = LoadLibrary("SHFolder.dll");
+    hLib = LoadLibraryA("SHFolder.dll");
     if (hLib) {
         SHGetFolderPathFunc = (HRESULT (__stdcall *)(HWND, int, HANDLE, DWORD, LPTSTR))
                               GetProcAddress(hLib, "SHGetFolderPathA");
         if (SHGetFolderPathFunc)
-            (*SHGetFolderPathFunc)(NULL, CSIDL_FONTS, NULL, SHGFP_TYPE_CURRENT, winFontDir);
-        FreeLibrary(hLib);
+            (*SHGetFolderPathFunc)(NULL, CSIDL_FONTS, 0, SHGFP_TYPE_CURRENT, LPTSTR (winFontDir));
+        FreeLibrary (hLib);
     }
     if (winFontDir[0])
         return;
 
     // Everything else failed so the standard fonts directory.
-    GetWindowsDirectory(winFontDir, cbWinFontDirLen);                                                       
+    GetWindowsDirectoryA(winFontDir, cbWinFontDirLen);                                                       
     if (winFontDir[0]) {
         strncat(winFontDir, FONTS_SUBDIR, cbWinFontDirLen);
         winFontDir[cbWinFontDirLen-1] = 0;

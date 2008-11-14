@@ -108,7 +108,7 @@ GooString *getCurrentDir() {
 #if defined(__EMX__)
   if (_getcwd2(buf, sizeof(buf)))
 #elif defined(WIN32)
-  if (GetCurrentDirectory(sizeof(buf), buf))
+  if (GetCurrentDirectory(sizeof(buf), LPWSTR (buf)))
 #elif defined(ACORN)
   if (strcpy(buf, "@"))
 #elif defined(MACOS)
@@ -170,7 +170,7 @@ GooString *appendToPath(GooString *path, char *fileName) {
   tmp = new GooString(path);
   tmp->append('/');
   tmp->append(fileName);
-  GetFullPathName(tmp->getCString(), sizeof(buf), buf, &fp);
+  GetFullPathNameA(tmp->getCString(), sizeof(buf), buf, &fp);
   delete tmp;
   path->clear();
   path->append(buf);
@@ -377,7 +377,7 @@ GooString *makePathAbsolute(GooString *path) {
   char *fp;
 
   buf[0] = '\0';
-  if (!GetFullPathName(path->getCString(), _MAX_PATH, buf, &fp)) {
+  if (!GetFullPathNameA(path->getCString(), _MAX_PATH, buf, &fp)) {
     path->clear();
     return path;
   }
@@ -635,7 +635,7 @@ GDirEntry::GDirEntry(char *dirPath, char *nameA, GBool doStat) {
 #elif defined(ACORN)
 #else
 #ifdef WIN32
-    fa = GetFileAttributes(fullPath->getCString());
+    fa = GetFileAttributesA(fullPath->getCString());
     dir = (fa != 0xFFFFFFFF && (fa & FILE_ATTRIBUTE_DIRECTORY));
 #else
     if (stat(fullPath->getCString(), &st) == 0)
@@ -658,7 +658,7 @@ GDir::GDir(char *name, GBool doStatA) {
 
   tmp = path->copy();
   tmp->append("/*.*");
-  hnd = FindFirstFile(tmp->getCString(), &ffd);
+  hnd = FindFirstFile((LPCWSTR) tmp->getCString(), &ffd);
   delete tmp;
 #elif defined(ACORN)
 #elif defined(MACOS)
@@ -690,7 +690,7 @@ GDirEntry *GDir::getNextEntry() {
 
 #if defined(WIN32)
   if (hnd != INVALID_HANDLE_VALUE) {
-    e = new GDirEntry(path->getCString(), ffd.cFileName, doStat);
+    e = new GDirEntry(path->getCString(), (char *) ffd.cFileName, doStat);
     if (!FindNextFile(hnd, &ffd)) {
       FindClose(hnd);
       hnd = INVALID_HANDLE_VALUE;
@@ -739,7 +739,7 @@ void GDir::rewind() {
     FindClose(hnd);
   tmp = path->copy();
   tmp->append("/*.*");
-  hnd = FindFirstFile(tmp->getCString(), &ffd);
+  hnd = FindFirstFile((LPCWSTR) tmp->getCString(), &ffd);
   delete tmp;
 #elif defined(ACORN)
 #elif defined(MACOS)
