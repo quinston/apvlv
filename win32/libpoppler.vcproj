@@ -41,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				UseUnicodeResponseFiles="true"
 				Optimization="0"
-				AdditionalIncludeDirectories="msvc;msvc\poppler;&quot;poppler-0.10.0&quot;;ext\jpeg;&quot;poppler-0.10.0\goo&quot;;&quot;poppler-0.10.0\poppler&quot;;ext\freetype231\include;ext\zlib"
+				AdditionalIncludeDirectories="msvc;msvc\poppler;&quot;poppler-0.10.0&quot;;&quot;poppler-0.10.0\goo&quot;;&quot;poppler-0.10.0\poppler&quot;;freetype231\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,8 +63,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="gtk-win32-2.0.lib glib-2.0.lib gobject-2.0.lib gio-2.0.lib gdk-win32-2.0.lib freetype231mt.lib jpeg_s.lib zlib_s.lib"
-				AdditionalLibraryDirectories="ext\freetype231;ext\jpeg;ext\zlib;&quot;C:\Program Files\Microsoft Visual Studio 8\SDK\gtk+\lib&quot;"
+				AdditionalDependencies="gtk-win32-2.0.lib glib-2.0.lib gobject-2.0.lib gio-2.0.lib gdk-win32-2.0.lib freetype231mt.lib jpeg.lib"
+				AdditionalLibraryDirectories="freetype231;&quot;C:\Program Files\Microsoft Visual Studio 8\SDK\gtk+\lib&quot;"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -404,11 +404,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\poppler-0.10.0\poppler\poppler-config.h"
+				RelativePath=".\msvc\poppler\poppler-config.h"
 				>
 			</File>
 			<File
-				RelativePath=".\msvc\poppler\poppler-config.h"
+				RelativePath=".\poppler-0.10.0\poppler\poppler-config.h"
 				>
 			</File>
 			<File
