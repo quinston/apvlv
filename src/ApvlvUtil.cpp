@@ -49,13 +49,13 @@ namespace apvlv
 {
 
 #ifdef WIN32
-	string helppdf = "Startup.pdf";
-	string inifile = "_apvlvrc";
-	string sessionfile = "_apvlvinfo";
+	string helppdf = "~\\Startup.pdf";
+	string inifile = "~\\_apvlvrc";
+	string sessionfile = "~\\_apvlvinfo";
 #else
   string helppdf;
-  string inifile;
-  string sessionfile;
+  string inifile = "~/.apvlvrc";
+  string sessionfile = "~/.apvlvinfo";
 #endif
 
   char *
@@ -73,8 +73,13 @@ namespace apvlv
 
         if (*path == '~')
           {
+#ifdef WIN32
+            char *home = g_win32_get_package_installation_directory_of_module (NULL);
+#else
+            char *home = getenv ("HOME");
+#endif
             snprintf (abpath, sizeof abpath, "%s%s", 
-                      getenv ("HOME"), 
+                      home, 
                       ++ path);
           }
         else

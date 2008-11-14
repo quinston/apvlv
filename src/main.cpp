@@ -55,20 +55,15 @@ main (int argc, char *argv[])
   ApvlvCmds sCmds;
   gCmds = &sCmds;
 
-#ifdef WIN32
-  const char *path = inifile.c_str ();
-#else
   const char *path = absolutepath (inifile.c_str ());
-#endif
 
   gboolean exist = g_file_test (path, G_FILE_TEST_IS_REGULAR);
   if (!exist)
     {
 #ifdef WIN32
-		filecpy (path, "apvlvrc.example");
+	  filecpy (path, "~\\apvlvrc.example");
 #else
-      string file = "";
-      file += PREFIX;
+      string file = PREFIX;
       file += "/share/doc/apvlv/apvlvrc.example";
       filecpy (path, file.c_str ());
 #endif
@@ -83,14 +78,12 @@ main (int argc, char *argv[])
   gView = &sView;
 
   // build the helppdf string
-#ifdef WIN32
-  helppdf = "Startup.pdf";
-#else
+#ifndef WIN32
   helppdf = string (PREFIX);
   helppdf += "/share/doc/apvlv/Startup.pdf";
 #endif
 
-  path = helppdf.c_str ();
+  path = absolutepath (helppdf.c_str ());
   if (argc > 1)
     {
       path = absolutepath (argv[1]);

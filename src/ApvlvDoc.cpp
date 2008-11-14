@@ -79,7 +79,7 @@ namespace apvlv
           savelastposition ();
         }
 //      positions.clear ();
-      gtk_widget_destroy (scrollwin);
+//      gtk_widget_destroy (scrollwin);
     }
 
   void
@@ -208,7 +208,10 @@ namespace apvlv
             lines = 50;
             chars = 80;
             filestr = filename;
-            loadlastposition ();
+            if (!loadlastposition ())
+              {
+                showpage (0);
+              }
             return true;
           }
 
