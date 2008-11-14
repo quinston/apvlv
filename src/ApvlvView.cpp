@@ -237,13 +237,13 @@ namespace apvlv
 
         if (crtadoc () != NULL && crtadoc ()->filename ())
           {
-/*            snprintf (temp, sizeof temp, "\"%s\"\t%d/%d\t\t%d\\%\t\t\t\t%d\\%",
+            snprintf (temp, sizeof temp, "\"%s\"\t%d/%d\t\t%d%%\t\t\t\t%d%%",
                       crtadoc ()->filename (),
                       crtadoc ()->pagenumber (),
                       crtadoc ()->pagesum (),
                       (int) (crtadoc ()->zoomvalue () * 100),
                       (int) (crtadoc ()->scrollrate () * 100)
-            );*/
+            );
           }
 
         gtk_entry_set_text (GTK_ENTRY (statusbar), temp);

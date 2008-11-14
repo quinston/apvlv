@@ -78,7 +78,7 @@ namespace apvlv
         {
           savelastposition ();
         }
-      positions.clear ();
+//      positions.clear ();
       gtk_widget_destroy (scrollwin);
     }
 
@@ -174,8 +174,24 @@ namespace apvlv
             return false;
           }
 
-		gchar *ufilename = g_locale_to_utf8 (filename, -1, NULL, NULL, NULL);
-        gchar *uri = g_filename_to_uri (ufilename, NULL, NULL);
+#ifdef WIN32
+		gchar *wfilename = g_win32_locale_filename_from_utf8 (filename);
+#else
+		gchar *wfilename = filename;
+#endif
+		FILE *fp = fopen (wfilename, "rb");
+		if (fp == NULL)
+		  {
+	        err ("Open file %s error", wfilename);
+            return false;
+          }
+
+        char *data = new char[10000000];
+        int len = fread (data, 1, 10000000, fp);
+        doc = poppler_document_new_from_data (data, len, NULL, NULL);
+
+#if 0
+        gchar *uri = g_filename_to_uri (filename, NULL, NULL);
         if (uri == NULL)
           {
             cerr << "Can't convert" << filename << "to a valid uri";
@@ -184,6 +200,7 @@ namespace apvlv
 
         doc = poppler_document_new_from_file (uri, NULL, NULL);
         g_free (uri);
+#endif
 
         if (doc != NULL)
           {
@@ -192,9 +209,10 @@ namespace apvlv
             chars = 80;
             filestr = filename;
             loadlastposition ();
+            return true;
           }
 
-        return doc == NULL? false: true;
+        return false;
       }
 
   void

@@ -177,6 +177,34 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
+			<File
+				RelativePath="..\src\ApvlvCmds.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ApvlvDoc.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ApvlvParams.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ApvlvUtil.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ApvlvView.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ApvlvWindow.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\main.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -205,40 +233,6 @@
 			</File>
 			<File
 				RelativePath="..\src\ApvlvWindow.hpp"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
-			>
-			<File
-				RelativePath="..\src\ApvlvCmds.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\ApvlvDoc.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\ApvlvParams.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\ApvlvUtil.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\ApvlvView.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\ApvlvWindow.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\main.cpp"
 				>
 			</File>
 		</Filter>
