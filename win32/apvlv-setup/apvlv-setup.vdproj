@@ -15,25 +15,13 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_031CA8A14AF44A7F8538D709D3AD2A09"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_0336572482A24DD00D7B735E78103F9A"
-        "OwnerKey" = "8:_70BCC76FE5174E9D8EFFE07B604CE8D3"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_10A20464E2594A658074CA1A0A2DEB15"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_11E03646D3CA4A7182148969E7F78612"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1ECC3171338E4EC884DA37E3EAC22921"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -45,37 +33,25 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_259BCBC51ECB48678DD577854DB3DB8C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_25B9CBCE737B475696619A7CB547CA9A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_4A371C6876AA483891856E9FC374C2D0"
+        "MsmKey" = "8:_60EA87C9F5E143A9AAE6FB36002909DE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_5E691C1F75B8FAF7E325091CBDA70274"
-        "OwnerKey" = "8:_70BCC76FE5174E9D8EFFE07B604CE8D3"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_64AD6630B6E4DCDCBDCE029E811069F0"
-        "OwnerKey" = "8:_70BCC76FE5174E9D8EFFE07B604CE8D3"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_658C45CFA78A4712AB8AF91DA8BD119E"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_67594A188F4B492F9C4C6ADCC6381E81"
+        "MsmKey" = "8:_6C3A11CA7892422CB443606AB72C6303"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -99,7 +75,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9A1935ED70214BCCB500F28393F2753C"
+        "MsmKey" = "8:_84FB7E030739419FAB4E7A4D3E4E79D8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -117,31 +93,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_B041789C864C075EF462DCCD38CAD747"
-        "OwnerKey" = "8:_70BCC76FE5174E9D8EFFE07B604CE8D3"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B2162FB507FE82E199FF02DAC704778E"
-        "OwnerKey" = "8:_70BCC76FE5174E9D8EFFE07B604CE8D3"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_C279845BBFD94654BD87668C83409F82"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_C687020A65115081FE5E074D2CD610B6"
-        "OwnerKey" = "8:_70BCC76FE5174E9D8EFFE07B604CE8D3"
+        "MsmKey" = "8:_D6FF512538C845F9BFC6BAEAE5DA3947"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_D6FF512538C845F9BFC6BAEAE5DA3947"
+        "MsmKey" = "8:_DED138375C654A97B023F3CD71EA1BC9"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -153,7 +117,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_FC7AF7B3E6674C3F8EE7216564BF1593"
+        "MsmKey" = "8:_F9B0D6270FF24EECAFE2AB8F1277B1E2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -175,6 +139,17 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                }
+            }
         }
         "Release"
         {
@@ -191,6 +166,17 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                }
+            }
         }
     }
     "Deployable"
@@ -212,70 +198,30 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_031CA8A14AF44A7F8538D709D3AD2A09"
-            {
-            "SourcePath" = "8:..\\..\\COPYING"
-            "TargetName" = "8:COPYING"
-            "Tag" = "8:"
-            "Folder" = "8:_4B52064CFDAC4E7BAE48A2629DE4EE51"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0336572482A24DD00D7B735E78103F9A"
-            {
-            "SourcePath" = "8:libgobject-2.0-0.dll"
-            "TargetName" = "8:libgobject-2.0-0.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_4B52064CFDAC4E7BAE48A2629DE4EE51"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_10A20464E2594A658074CA1A0A2DEB15"
-            {
-            "SourcePath" = "8:..\\..\\NEWS"
-            "TargetName" = "8:NEWS"
-            "Tag" = "8:"
-            "Folder" = "8:_4B52064CFDAC4E7BAE48A2629DE4EE51"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_11E03646D3CA4A7182148969E7F78612"
             {
             "SourcePath" = "8:C:\\Program Files\\Microsoft Visual Studio 8\\SDK\\gtk+\\bin\\libpangocairo-1.0-0.dll"
             "TargetName" = "8:libpangocairo-1.0-0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_4B52064CFDAC4E7BAE48A2629DE4EE51"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1ECC3171338E4EC884DA37E3EAC22921"
+            {
+            "SourcePath" = "8:..\\..\\COPYING"
+            "TargetName" = "8:COPYING"
             "Tag" = "8:"
             "Folder" = "8:_4B52064CFDAC4E7BAE48A2629DE4EE51"
             "Condition" = "8:"
@@ -312,6 +258,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_259BCBC51ECB48678DD577854DB3DB8C"
+            {
+            "SourcePath" = "8:..\\..\\NEWS"
+            "TargetName" = "8:NEWS"
+            "Tag" = "8:"
+            "Folder" = "8:_4B52064CFDAC4E7BAE48A2629DE4EE51"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_25B9CBCE737B475696619A7CB547CA9A"
             {
             "SourcePath" = "8:C:\\Program Files\\Microsoft Visual Studio 8\\SDK\\gtk+\\bin\\libatk-1.0-0.dll"
@@ -332,90 +298,30 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4A371C6876AA483891856E9FC374C2D0"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_60EA87C9F5E143A9AAE6FB36002909DE"
+            {
+            "SourcePath" = "8:..\\..\\Startup.pdf"
+            "TargetName" = "8:Startup.pdf"
+            "Tag" = "8:"
+            "Folder" = "8:_4B52064CFDAC4E7BAE48A2629DE4EE51"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6C3A11CA7892422CB443606AB72C6303"
             {
             "SourcePath" = "8:..\\..\\README"
             "TargetName" = "8:README"
-            "Tag" = "8:"
-            "Folder" = "8:_4B52064CFDAC4E7BAE48A2629DE4EE51"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5E691C1F75B8FAF7E325091CBDA70274"
-            {
-            "SourcePath" = "8:libglib-2.0-0.dll"
-            "TargetName" = "8:libglib-2.0-0.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_4B52064CFDAC4E7BAE48A2629DE4EE51"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_64AD6630B6E4DCDCBDCE029E811069F0"
-            {
-            "SourcePath" = "8:libgdk-win32-2.0-0.dll"
-            "TargetName" = "8:libgdk-win32-2.0-0.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_4B52064CFDAC4E7BAE48A2629DE4EE51"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_658C45CFA78A4712AB8AF91DA8BD119E"
-            {
-            "SourcePath" = "8:..\\..\\AUTHORS"
-            "TargetName" = "8:AUTHORS"
-            "Tag" = "8:"
-            "Folder" = "8:_4B52064CFDAC4E7BAE48A2629DE4EE51"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_67594A188F4B492F9C4C6ADCC6381E81"
-            {
-            "SourcePath" = "8:..\\..\\THANKS"
-            "TargetName" = "8:THANKS"
             "Tag" = "8:"
             "Folder" = "8:_4B52064CFDAC4E7BAE48A2629DE4EE51"
             "Condition" = "8:"
@@ -472,10 +378,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9A1935ED70214BCCB500F28393F2753C"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_84FB7E030739419FAB4E7A4D3E4E79D8"
             {
-            "SourcePath" = "8:..\\..\\Startup.pdf"
-            "TargetName" = "8:Startup.pdf"
+            "SourcePath" = "8:..\\..\\THANKS"
+            "TargetName" = "8:THANKS"
             "Tag" = "8:"
             "Folder" = "8:_4B52064CFDAC4E7BAE48A2629DE4EE51"
             "Condition" = "8:"
@@ -532,46 +438,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B041789C864C075EF462DCCD38CAD747"
-            {
-            "SourcePath" = "8:libgtk-win32-2.0-0.dll"
-            "TargetName" = "8:libgtk-win32-2.0-0.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_4B52064CFDAC4E7BAE48A2629DE4EE51"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B2162FB507FE82E199FF02DAC704778E"
-            {
-            "SourcePath" = "8:jpeg62.dll"
-            "TargetName" = "8:jpeg62.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_4B52064CFDAC4E7BAE48A2629DE4EE51"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C279845BBFD94654BD87668C83409F82"
             {
             "SourcePath" = "8:C:\\Program Files\\Microsoft Visual Studio 8\\SDK\\gtk+\\bin\\libpng12-0.dll"
@@ -592,10 +458,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C687020A65115081FE5E074D2CD610B6"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D6FF512538C845F9BFC6BAEAE5DA3947"
             {
-            "SourcePath" = "8:libgdk_pixbuf-2.0-0.dll"
-            "TargetName" = "8:libgdk_pixbuf-2.0-0.dll"
+            "SourcePath" = "8:C:\\Program Files\\Microsoft Visual Studio 8\\SDK\\gtk+\\bin\\libtiff3.dll"
+            "TargetName" = "8:libtiff3.dll"
             "Tag" = "8:"
             "Folder" = "8:_4B52064CFDAC4E7BAE48A2629DE4EE51"
             "Condition" = "8:"
@@ -609,13 +475,13 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D6FF512538C845F9BFC6BAEAE5DA3947"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DED138375C654A97B023F3CD71EA1BC9"
             {
-            "SourcePath" = "8:C:\\Program Files\\Microsoft Visual Studio 8\\SDK\\gtk+\\bin\\libtiff3.dll"
-            "TargetName" = "8:libtiff3.dll"
+            "SourcePath" = "8:..\\..\\AUTHORS"
+            "TargetName" = "8:AUTHORS"
             "Tag" = "8:"
             "Folder" = "8:_4B52064CFDAC4E7BAE48A2629DE4EE51"
             "Condition" = "8:"
@@ -652,7 +518,7 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FC7AF7B3E6674C3F8EE7216564BF1593"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F9B0D6270FF24EECAFE2AB8F1277B1E2"
             {
             "SourcePath" = "8:..\\..\\apvlvrc.example"
             "TargetName" = "8:apvlvrc.example"
