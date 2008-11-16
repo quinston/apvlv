@@ -3,7 +3,7 @@
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
 "IsWebType" = "8:FALSE"
-"ProjectName" = "8:apvlv-setup"
+"ProjectName" = "8:setup"
 "LanguageId" = "3:1033"
 "CodePage" = "3:1252"
 "UILanguageId" = "3:1033"
@@ -1114,7 +1114,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_70BCC76FE5174E9D8EFFE07B604CE8D3"
             {
-            "SourcePath" = "8:..\\Debug\\apvlv.exe"
+            "SourcePath" = "8:..\\debug\\apvlv.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_4B52064CFDAC4E7BAE48A2629DE4EE51"

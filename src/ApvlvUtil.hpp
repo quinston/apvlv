@@ -55,8 +55,7 @@ namespace apvlv
   extern string sessionfile;
 
   // Converts the path given to a absolute path.
-  // Warning: The string is returned in a statically allocated buffer,  which  subse-
-  // quent calls will overwrite.
+  // Warning: The string is returned in a new allocated buffer, so you MUST free the buffer by your seft.
   char *absolutepath (const char *path);
 
   // Copy a file

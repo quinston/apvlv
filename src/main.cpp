@@ -55,22 +55,20 @@ main (int argc, char *argv[])
   ApvlvCmds sCmds;
   gCmds = &sCmds;
 
-  const char *path = absolutepath (inifile.c_str ());
-
-  gboolean exist = g_file_test (path, G_FILE_TEST_IS_REGULAR);
+  gboolean exist = g_file_test (inifile.c_str (), G_FILE_TEST_IS_REGULAR);
   if (!exist)
     {
 #ifdef WIN32
-	  filecpy (path, "~\\apvlvrc.example");
+	  filecpy (inifile.c_str (), "~\\apvlvrc.example");
 #else
       string file = PREFIX;
       file += "/share/doc/apvlv/apvlvrc.example";
-      filecpy (path, file.c_str ());
+      filecpy (inifile.c_str (), file.c_str ());
 #endif
     }
   else
     {
-      gParams->loadfile (path);
+      gParams->loadfile (inifile.c_str ());
     }
   //  param.debug ();
 
@@ -83,13 +81,18 @@ main (int argc, char *argv[])
   helppdf += "/share/doc/apvlv/Startup.pdf";
 #endif
 
-  path = absolutepath (helppdf.c_str ());
+  char *path = absolutepath (helppdf.c_str ());
   if (argc > 1)
     {
+      free (path);
       path = absolutepath (argv[1]);
     }
   
-  gView->loadfile (path);
+  if (path != NULL)
+    {
+      gView->loadfile (path);
+      free (path);
+    }
 
   gView->show ();
 

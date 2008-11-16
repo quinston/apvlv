@@ -96,7 +96,7 @@ namespace apvlv
         }
 
       if (type == AW_DOC
-          && m_Doc != gView->hasloaded (m_Doc->filename ())
+        && m_Doc != gView->hasloaded (m_Doc->filename ())
       )
         {
           delete m_Doc;

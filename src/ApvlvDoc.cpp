@@ -78,8 +78,8 @@ namespace apvlv
         {
           savelastposition ();
         }
-//      positions.clear ();
-//      gtk_widget_destroy (scrollwin);
+      positions.clear ();
+      gtk_widget_destroy (scrollwin);
     }
 
   void
@@ -104,7 +104,7 @@ namespace apvlv
   bool
     ApvlvDoc::savelastposition ()
       {
-		  char *path = absolutepath (sessionfile.c_str ());
+		char *path = absolutepath (sessionfile.c_str ());
 
         ofstream os (path, ios::app);
 
@@ -124,7 +124,9 @@ namespace apvlv
   bool
     ApvlvDoc::loadlastposition ()
       {
-		  char *path = absolutepath (sessionfile.c_str ());
+		char *path = absolutepath (sessionfile.c_str ());
+        if (path == NULL)
+          return false;
 
         ifstream os (path, ios::in);
 
@@ -161,8 +163,10 @@ namespace apvlv
             gtk_timeout_add (50, apvlv_doc_first_scroll_cb, this);
 
             os.close ();
+            free (path);
 			return true;
           }
+        free (path);
 		return false;
       }
 

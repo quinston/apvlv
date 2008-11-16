@@ -203,9 +203,10 @@ deft:
           }
         else
           {
-            if (KS[gev->keyval] != NULL)
+            map <guint, const char *>::iterator it = KS.find (gev->keyval);
+            if (it != KS.end ())
               {
-                s->append (KS[gev->keyval]);
+                s->append (it->second);
               }
             else
               {

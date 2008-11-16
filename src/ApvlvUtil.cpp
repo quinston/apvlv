@@ -61,14 +61,14 @@ namespace apvlv
   char *
     absolutepath (const char *path)
       {
-        static char abpath[512];
+        char abpath[512];
 
 		if (path == NULL)
 			return NULL;
 
         if (g_path_is_absolute (path))
           {
-            return (char *) path;
+            return strdup (path);
           }
 
         if (*path == '~')
@@ -93,28 +93,29 @@ namespace apvlv
 #endif
           }
 
-        return abpath;
+        return strdup (abpath);
       }
 
   bool 
     filecpy (const char *dst, const char *src)
       {
-        ifstream ifs (absolutepath (src));
-        ofstream ofs (absolutepath (dst));
-        if (ifs.is_open () && ofs.is_open ())
-          {
-            while (ifs.eof () == false)
-              {
-                string s;
-                getline (ifs, s);
-                ofs << s << endl;
-              }
+        gchar *content;
+        gchar *s = absolutepath (src);
+        gchar *d = absolutepath (dst);
+        bool ok = false;
 
-            ifs.close ();
-            ofs.close ();
-			return true;
+        gboolean ret = g_file_get_contents (s, &content, NULL, NULL);
+        if (ret == TRUE)
+          {
+            ret = g_file_set_contents (d, content, -1, NULL);
+            g_free (content);        
+            ok = ret;
           }
-		return false;
+
+        free (s);
+        free (d);
+
+        return ok;
       }
 
   void
