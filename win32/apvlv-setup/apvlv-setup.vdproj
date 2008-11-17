@@ -835,8 +835,8 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:apvlv"
-        "ProductCode" = "8:{2ECFF49D-289A-4C45-8F0F-9C80B89BC463}"
-        "PackageCode" = "8:{D3B31CB4-67E1-4CDA-9CCF-ECAD2AD3AE9A}"
+        "ProductCode" = "8:{C706BF94-CDD3-445A-8821-B95744836B0C}"
+        "PackageCode" = "8:{3356D642-700E-408E-9B29-1954874D9701}"
         "UpgradeCode" = "8:{76BD4EC1-37A0-4C00-8E09-B513FE3D9B38}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"

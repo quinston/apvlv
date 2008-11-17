@@ -55,21 +55,26 @@ main (int argc, char *argv[])
   ApvlvCmds sCmds;
   gCmds = &sCmds;
 
-  gboolean exist = g_file_test (inifile.c_str (), G_FILE_TEST_IS_REGULAR);
-  if (!exist)
-    {
+  gchar *ini = absolutepath (inifile.c_str ());
+  if (ini != NULL)
+  {
+    gboolean exist = g_file_test (ini, G_FILE_TEST_IS_REGULAR);
+    if (!exist)
+      {
 #ifdef WIN32
-	  filecpy (inifile.c_str (), "~\\apvlvrc.example");
+	    filecpy (inifile.c_str (), "~\\apvlvrc.example");
 #else
-      string file = PREFIX;
-      file += "/share/doc/apvlv/apvlvrc.example";
-      filecpy (inifile.c_str (), file.c_str ());
+        string file = PREFIX;
+        file += "/share/doc/apvlv/apvlvrc.example";
+        filecpy (inifile.c_str (), file.c_str ());
 #endif
-    }
-  else
-    {
-      gParams->loadfile (inifile.c_str ());
-    }
+      }
+    else
+      {
+        gParams->loadfile (inifile.c_str ());
+      }
+    free (ini);
+  }
   //  param.debug ();
 
   ApvlvView sView (argc, argv);
