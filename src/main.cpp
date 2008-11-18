@@ -62,7 +62,7 @@ main (int argc, char *argv[])
     if (!exist)
       {
 #ifdef WIN32
-	    filecpy (inifile.c_str (), "~\\apvlvrc.example");
+	    filecpy (ini, "~\\apvlvrc.example");
 #else
         string file = PREFIX;
         file += "/share/doc/apvlv/apvlvrc.example";
@@ -71,7 +71,7 @@ main (int argc, char *argv[])
       }
     else
       {
-        gParams->loadfile (inifile.c_str ());
+        gParams->loadfile (ini);
       }
     free (ini);
   }
