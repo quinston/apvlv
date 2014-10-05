@@ -57,13 +57,13 @@ namespace apvlv
     if (pix)
       {
 	gtk_tree_store_set (dir->mStore, nitr, 0, this, 1, pix, 2,
-			    title, -1);
+			    title, 3, mPagenum, -1);
 	g_object_unref (pix);
       }
     else
       {
 	gtk_tree_store_set (dir->mStore, nitr, 0, this, 2,
-			    title, -1);
+			    title, 3, mPagenum, -1);
       }
 
   }
@@ -175,7 +175,7 @@ namespace apvlv
     mFile = NULL;
 
     mStore =
-      gtk_tree_store_new (3, G_TYPE_POINTER, G_TYPE_OBJECT, G_TYPE_STRING);
+      gtk_tree_store_new (4, G_TYPE_POINTER, G_TYPE_OBJECT, G_TYPE_STRING, G_TYPE_INT);
     mDirView = gtk_tree_view_new_with_model (GTK_TREE_MODEL (mStore));
     gtk_container_add (GTK_CONTAINER (mScrollwin), mDirView);
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (mDirView), FALSE);
@@ -192,7 +192,7 @@ namespace apvlv
     gtk_tree_view_column_pack_start (column, renderer, FALSE);
     gtk_tree_view_column_add_attribute (column, renderer0, "pixbuf", 1);
     gtk_tree_view_column_add_attribute (column, renderer, "text", 2);
-    gtk_tree_view_column_set_sort_column_id (column, 2);
+    gtk_tree_view_column_set_sort_column_id (column, 3);
     gtk_tree_view_column_set_sort_order (column, GTK_SORT_ASCENDING);
     gtk_tree_view_append_column (GTK_TREE_VIEW (mDirView), column);
     gtk_tree_view_column_clicked (column);
